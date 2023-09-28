@@ -28,9 +28,6 @@ const userSchema=new mongoose.Schema({
     verifyExpiry:Date
 	})
 
-
-
-    let User=mongoose.models.user;
-    User||=mongoose.model('user', userSchema);
+    const User=mongoose.models.user||mongoose.model('user', userSchema);
 
 export default User;
