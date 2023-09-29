@@ -1,10 +1,10 @@
 import connectDB from "@/db/dbConfig";
 import bcrypt from "bcrypt";
 import User from "@/models/userModel";
+import {sendMail} from "@/utility/mailer";
+import {NextResponse} from "next/server";
 
-// import {NextRequest, NextResponse} from "next/server";
-
-connectDB();
+await connectDB();
 
 export async function POST(request){
     try {
@@ -14,7 +14,7 @@ export async function POST(request){
         //check if username exists
         const user=await User.findOne({username:username});
         if(user){
-            return Response.json({error:"Username already exists."},{status:400});
+            return NextResponse.json({error:"Username already exists."},{status:400});
         }
 
         //if username doesnt exist, proceed with hashing password
@@ -27,14 +27,17 @@ export async function POST(request){
 
         //save new user in DB
         const savedUser=await newUser.save();
-        return Response.json({
+        const stringUserId = savedUser._id.toHexString();
+        sendMail(email, "VERIFY", stringUserId);
+
+        return NextResponse.json({
             message:"User created successfully",
             success:true,
             savedUser:savedUser
         })     
     } 
     catch (error) {
-        return Response.json({error:error.message},{status:500});
+        return NextResponse.json({error:error.message},{status:500});
     }
 }
 

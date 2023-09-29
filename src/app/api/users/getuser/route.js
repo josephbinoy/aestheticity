@@ -1,9 +1,9 @@
-import getTokenData from "./getTokenData";
+import getTokenData from "@/utility/getTokenData";
 import connectDB from "@/db/dbConfig";
 import User from "@/models/userModel"
 import { NextResponse } from "next/server";
 
-connectDB();
+await connectDB();
 
 export async function GET(request){
     try{

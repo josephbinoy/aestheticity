@@ -4,7 +4,7 @@ import User from "@/models/userModel";
 import jwt from "jsonwebtoken";
 import {NextResponse} from "next/server";
 
-connectDB();
+await connectDB();
 
 export async function POST(request){
     try {
@@ -29,9 +29,11 @@ export async function POST(request){
             email:user.email
         }
 
-        const token=jwt.sign(tokenData, process.env.JWT_KEY , { expiresIn: '1d' });
+        const token=jwt.sign(tokenData, process.env.JWT_KEY , { expiresIn: '5h' });
         const response=NextResponse.json({message:"Login successful", success:true});
-        response.cookies.set('token', token);
+        response.cookies.set('token', token, {httpOnly:true,
+        secure:true,
+        maxAge:604800});
         return response;
     } 
     catch (error) {
