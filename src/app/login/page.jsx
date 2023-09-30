@@ -23,14 +23,13 @@ export default function LoginPage(){
         try{
             e.preventDefault();
             const response=await axios.post("/api/users/login", user);
-            console.log(response);
+            console.log(response.data);
             router.push("/profile");
         }
         catch(error){
             console.log(error);
-            toast.error("Incorrect Password. Login Unsuccessful");
+            toast.error(error.response.data.error);
         }
-
     }
 
     return (
@@ -42,9 +41,10 @@ export default function LoginPage(){
                     <input className="p-4 w-[300px] rounded-lg focus:outline-red-600 text-black" onChange={handleChange} type="text" placeholder="Enter Username" name="username" value={user.username} />
                     <label className="self-start">Password</label>
                     <input className="p-4 w-[300px] rounded-lg focus:outline-red-600 text-black" onChange={handleChange} type="password" placeholder="Enter Password" name="password" value={user.password} />
+                    <Link className="hover:text-red-500" href="/forgotpassword">Forgot Password?</Link>
                     <button className="bg-slate-500 p-3 rounded-xl hover:bg-slate-200 hover:text-black">Log in</button>
                 </form>
-                <p>Don't have an account? <Link className="hover:text-red-500" href="/signup">Sign up now!</Link> now</p>
+                <p>Don't have an account? <Link className="hover:text-red-500" href="/signup">Sign up now!</Link></p>
                 <Toaster />                
         </div>
       </div>

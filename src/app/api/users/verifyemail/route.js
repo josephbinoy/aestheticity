@@ -11,7 +11,7 @@ export async function POST(request){
         const curDate=new Date();
         const foundUser=await User.findOne({verifyToken:token, verifyExpiry:{ $gt: curDate }})
         if(!foundUser)
-            return NextResponse.json({message:"Verification failed. No such user found" }, {status:400});
+            return NextResponse.json({error:"Verification failed. No such user found" }, {status:400});
         foundUser.isVerified=true;
         foundUser.verifyToken=undefined;
         foundUser.verifyExpiry=undefined;

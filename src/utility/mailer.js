@@ -26,9 +26,9 @@ export async function sendMail(emailID, emailType, userID){
         const mailOptions={
               from: 'support@aestheticity.com',
               to: emailID,
-              subject: `${emailType?"Verify account":"Reset password"}`,
+              subject: `${emailType==="VERIFY"?"Verify account":"Reset password"}`,
               html: `<b>Click the button to ${emailType==="VERIFY"?"verify your account":"reset your password"} </b><br><br>
-                      <button><a href="${process.env.domain}/mail?token=${hashedToken}">Click here</a></button>`
+                      <button><a href="${process.env.domain}/${(emailType==="VERIFY")?"verifyemail":"resetpassword"}?token=${hashedToken}">Click here</a></button>`
           }
         await transport.sendMail(mailOptions);
     }

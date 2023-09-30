@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation";
 import { useSearchParams } from "next/navigation";
 import toast, { Toaster } from 'react-hot-toast';
 
-export default function Mail(){
+export default function VerifyPage(){
     const router=useRouter();
     const searchParams = useSearchParams()
     const token = searchParams.get('token')
@@ -15,14 +15,14 @@ export default function Mail(){
 
     async function verifyUser(){
         try{
-        await axios.post("/api/users/verifyemail", {token:token})
-        toast.success("Verification successful");
-        setVerified(true);
-        router.push('/login');
+            const response=await axios.post("/api/users/verifyemail", {token})
+            toast.success(response.data.message);
+            setVerified(true);
+            router.push('/login');
         }
         catch(error){
             setError(true);
-            toast.error(error.message)
+            toast.error(error.response.data.error)
         }
     }
 

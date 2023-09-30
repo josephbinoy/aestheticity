@@ -23,6 +23,6 @@ export async function GET(request){
         return NextResponse.json({error:"User details not found"}, {status:400})
     }
     catch(error){
-        return NextResponse.json({error:error}, {status:400})
+        return NextResponse.json({error:error.message}, {status:400})
     }
 }
