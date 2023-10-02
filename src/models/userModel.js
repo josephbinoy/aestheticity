@@ -1,4 +1,4 @@
-import mongoose from "mongoose";
+import mongoose, {Schema} from "mongoose";
 
 const userSchema=new mongoose.Schema({
     username:{
@@ -15,6 +15,10 @@ const userSchema=new mongoose.Schema({
         type:String,
         required: true
     },
+    favorites: [{ 
+        type: Schema.Types.ObjectId, 
+        ref: 'image' 
+    }],
     isVerified:{
         type:Boolean,
         default:false
@@ -29,6 +33,6 @@ const userSchema=new mongoose.Schema({
     verifyExpiry:Date
 	})
 
-    const User=mongoose.models.user||mongoose.model('user', userSchema);
+    const User=mongoose.models.user || mongoose.model('user', userSchema);
 
 export default User;

@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation";
 import { useSearchParams } from "next/navigation";
 import toast, { Toaster } from 'react-hot-toast';
 
-export default function VerifyPage(){
+export default function Page(){
     const router=useRouter();
     const searchParams = useSearchParams()
     const token = searchParams.get('token')

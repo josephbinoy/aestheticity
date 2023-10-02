@@ -4,7 +4,7 @@ import axios from "axios"
 import { useState } from "react"
 import toast, { Toaster } from 'react-hot-toast';
 
-export default function LoginPage(){
+export default function Page(){
     const [userIdentifier, setUserIdentifier]=useState("");
 
     function handleChange(e){

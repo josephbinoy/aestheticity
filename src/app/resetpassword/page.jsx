@@ -6,7 +6,7 @@ import { useSearchParams } from "next/navigation";
 import toast,{ Toaster } from "react-hot-toast";
 import axios from "axios";
 
-export default function LoginPage(){
+export default function Page(){
     const searchParams = useSearchParams()
     const token = searchParams.get('token')
     const router=useRouter();

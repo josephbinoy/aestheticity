@@ -6,7 +6,7 @@ import axios from "axios"
 import { useEffect, useState } from "react"
 import toast, { Toaster } from 'react-hot-toast';
 
-export default function SignUpPage(){
+export default function Page(){
     const router=useRouter();
     const [allowSubmit, setAllowSubmit]=useState(false);
     const [user, setUser]=useState({
@@ -23,7 +23,9 @@ export default function SignUpPage(){
 
     async function signUpUser(){
         try {
+            console.log("sending axios request");
             const response=await axios.post("/api/users/signup", user);
+            console.log("sent axios request");
             toast.success(response.data.message);
             router.push('/login');
         } catch (error) {
