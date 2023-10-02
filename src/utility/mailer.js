@@ -1,8 +1,6 @@
 import nodemailer from "nodemailer";
 import User from "@/models/userModel";
 import bcrypt from "bcrypt"
-// import connectDB from "@/db/dbConfig";
-// connectDB();
 
 const transport = nodemailer.createTransport({
   host: "sandbox.smtp.mailtrap.io",
@@ -18,10 +16,10 @@ export async function sendMail(emailID, emailType, userID){
         const hashedToken = await bcrypt.hash(userID, 10);
         const curDate=Date.now();
         if(emailType==="VERIFY"){
-            await User.findByIdAndUpdate(userID, {verifyToken:hashedToken, verifyExpiry:curDate+3600000});
+            await User.updateOne({_id:userID}, {verifyToken:hashedToken, verifyExpiry:curDate+3600000});
         }
         else if(emailType==="RESET"){
-            await User.findByIdAndUpdate(userID, {forgotPasswordToken:hashedToken, forgotPasswordExpiry:curDate+3600000});
+            await User.updateOne({_id:userID}, {forgotPasswordToken:hashedToken, forgotPasswordExpiry:curDate+3600000});
         }
         const mailOptions={
               from: 'support@aestheticity.com',

@@ -14,9 +14,9 @@ export async function GET(request){
             user=await User.findById(userID);
             if(user){
                 return NextResponse.json({
-                    message:"Token Verified and User Found",
+                    message:"User found",
                     success:true,
-                    data:user
+                    user:user
                 })
             }
         }

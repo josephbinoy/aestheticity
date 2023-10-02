@@ -1,8 +1,9 @@
-import mongoose from "mongoose";
 import connectDB from "@/db/dbConfig";
 import Image from "@/models/imageModel";
+import User from "@/models/userModel";
 import getTokenData from "@/utility/getTokenData";
 import { NextResponse } from "next/server";
+import mongoose from "mongoose";
 
 await connectDB();
 
@@ -11,13 +12,13 @@ export async function POST(request){
         const tokenData=getTokenData(request);
         const reqBody=await request.json();
         const newImage=new Image({
-            uploader:new mongoose.Types.ObjectId(tokenData.userID),
-            image:{
-                data:reqBody.imageBinary.data,
-                contentType:reqBody.imageType
-            }
+            uploader:tokenData.username,
+            data:reqBody.imageBinary.data,
+            imageFormat:reqBody.imageType
         })
-        await newImage.save();
+        const savedImage=await newImage.save();
+        const imageID=savedImage._id;
+        await User.updateOne({_id:tokenData.userID},{"$push": { "uploads": new mongoose.Types.ObjectId(imageID) }})
         // const base64Result=savedImage.image.data.toString('base64');
         // const imageTypeResult=savedImage.image.contentType;
         return NextResponse.json({message:"Uploaded image"}, {status:200})

@@ -10,7 +10,7 @@ export async function POST(request){
     try{
         const tokenData=getTokenData(request);
         const {imageID}=await request.json();
-        await User.findByIdAndUpdate(tokenData.userID,{"$push": { "favorites": new mongoose.Types.ObjectId(imageID) }});  
+        await User.updateOne({_id:tokenData.userID},{"$push": { "favorites": new mongoose.Types.ObjectId(imageID) }});  
         return NextResponse.json({message:"Favorited image!"}, {status:200})
     }
     catch(error){

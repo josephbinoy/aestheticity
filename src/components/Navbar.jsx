@@ -1,20 +1,46 @@
 "use client"
 
-import { Fragment } from 'react'
+import { Fragment, useEffect, useState } from 'react'
 import { Disclosure, Menu, Transition } from '@headlessui/react'
 import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline'
+import axios from 'axios'
+import { useRouter } from 'next/navigation'
+import Link from 'next/link'
 
 const navigation = [
-  { name: 'Home', href: '#', current: true },
+  { name: 'Home', href: '/', current: true },
   { name: 'Gallery', href: '#', current: false },
   { name: 'Collections', href: '#', current: false },
 ]
-
 function classNames(...classes) {
   return classes.filter(Boolean).join(' ')
 }
 
 export default function Navbar() {
+  const [isLoggedIn, setIsLoggedIn]=useState(false);
+  const router=useRouter();
+  async function logOutUser(){
+    try {
+        await axios.get("/api/users/logout")
+        router.push("/login");
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+useEffect(()=>{
+  async function verifySession(){
+    try{
+      const response=await axios.get("/api/users/getuser");
+      if(response.data)
+        setIsLoggedIn(true);
+   }
+   catch(error){
+    console.log(error);
+   }
+  }
+  verifySession();
+},[])
   return (
     <Disclosure as="nav" className="bg-gray-950">
       {({ open }) => (
@@ -47,7 +73,7 @@ export default function Navbar() {
                 <div className="hidden sm:ml-6 sm:block my-auto">
                   <div className="flex space-x-4">
                     {navigation.map((item) => (
-                      <a
+                      <Link
                         key={item.name}
                         href={item.href}
                         className={classNames(
@@ -56,7 +82,7 @@ export default function Navbar() {
                         )}
                       >
                         {item.name}
-                      </a>
+                      </Link>
                     ))}
                   </div>
                 </div> {/* nav links */}
@@ -66,6 +92,7 @@ export default function Navbar() {
               <div className="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
 
                 {/* Profile dropdown */}
+                {isLoggedIn?
                 <Menu as="div" className="relative ml-3">
                   <div>
                     <Menu.Button className="relative flex ring-1 ring-white bg-gray-800 focus:outline-none focus:ring-2 focus:ring-white">
@@ -89,19 +116,19 @@ export default function Navbar() {
                     <Menu.Items className="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-gray-900 py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
                       <Menu.Item>
                         {({ active }) => (
-                          <a
-                            href="#"
-                            className={classNames(active ? 'bg-gray-700' : '', 'block px-4 py-2 text-sm text-gray-300')}
+                          <Link
+                            href="/profile"
+                            className={classNames(active ? 'bg-gray-700' : '', 'block px-4 py-2 text-sm text-gray-300 cursor-pointer')}
                           >
                             Your Profile
-                          </a>
+                          </Link>
                         )}
                       </Menu.Item>
                       <Menu.Item>
                         {({ active }) => (
                           <a
                             href="#"
-                            className={classNames(active ? 'bg-gray-700' : '', 'block px-4 py-2 text-sm text-gray-300')}
+                            className={classNames(active ? 'bg-gray-700' : '', 'block px-4 py-2 text-sm text-gray-300 cursor-pointer')}
                           >
                             Settings
                           </a>
@@ -109,17 +136,17 @@ export default function Navbar() {
                       </Menu.Item>
                       <Menu.Item>
                         {({ active }) => (
-                          <a
-                            href="#"
-                            className={classNames(active ? 'bg-gray-700' : '', 'block px-4 py-2 text-sm text-gray-300')}
+                          <p onClick={logOutUser}
+                            className={classNames(active ? 'bg-gray-700' : '', 'block px-4 py-2 text-sm text-gray-300 cursor-pointer')}
                           >
                             Log out
-                          </a>
+                          </p>
                         )}
                       </Menu.Item>
                     </Menu.Items>
                   </Transition>
-                </Menu>
+                </Menu>:<button className='text-white'><Link href="/login">Log in</Link></button>}
+
               </div>
             </div>
           </div>

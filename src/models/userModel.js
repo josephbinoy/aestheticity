@@ -19,6 +19,10 @@ const userSchema=new mongoose.Schema({
         type: Schema.Types.ObjectId, 
         ref: 'image' 
     }],
+    uploads: [{ 
+        type: Schema.Types.ObjectId, 
+        ref: 'image' 
+    }],
     isVerified:{
         type:Boolean,
         default:false
