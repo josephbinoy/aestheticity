@@ -1,14 +1,17 @@
 "use client"
-import { useState,useEffect } from "react"
-import { Carousel } from 'flowbite-react';
+import { useState,useEffect,Suspense } from "react"
+import { Carousel, Modal } from 'flowbite-react';
 import { HeartIcon } from "@heroicons/react/24/outline";
 import axios from "axios";
 import toast, {Toaster} from "react-hot-toast";
 import MyFooter from "@/components/Footer";
 
 export default function Page(){
+  const [modalImgUrl,setModalImgUrl]=useState("");
   const [redHearts, setRedHearts]=useState([]);
   const [galleryArray,setGalleryArray]=useState([]);
+  const [openModal, setOpenModal] = useState();
+  const props = { openModal, setOpenModal };
 
   async function favoriteImage(id,i){
     let favoriteArray=redHearts.map((item,index)=>(i==index)?true:item)
@@ -37,36 +40,51 @@ export default function Page(){
   return (
     <>
       <div className="relative h-[60vh]">
-      <Carousel>
+      <Carousel leftControl="left"
+      rightControl="right" indicators={false}>
         <img src='/1610350906331.jpg'  className="h-[60vh] w-full object-cover" />
         <img src='/1612277696327.jpg'  className="h-[60vh] w-full object-cover"/>
         <img src='/1624317006456.jpg'  className="h-[60vh] w-full object-cover"/>
         <img src='/1625609225629.jpg'  className="h-[60vh] w-full object-cover"/>
         <img src='/sv9jpowlw8o71.jpg'  className="h-[60vh] w-full object-cover"/>
       </Carousel>
-      <div className="absolute top-0 right-0 bg-gradient-to-l from-black to-transparent h-full w-full text-white text-[64px] flex flex-col justify-center items-end">
+      <div className="opacity-75 absolute top-0 right-0 bg-gradient-to-l from-black to-transparent h-full w-full text-white text-[64px] flex flex-col justify-center items-end">
           <h1 className="inline-block mx-20 text-gray-300">find your aesthetic today.</h1>
           <h1 className="inline-block mx-20 text-gray-300">from you. for you.</h1>
       </div>
       </div>
       <h1 className="text-4xl font-bold m-20">Uncompressed images in all their glory.</h1>
       <div className="grid md:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 w-full gap-10 my-20 px-20 ">
+      <Suspense fallback={<p>Loading...</p>}>
           {galleryArray.map((image,index)=>{
-            return <div key={image._id} className="relative w-11/12 shadow-lg hover:scale-110 transition-all hover:shadow-2xl bg-gradient-to-l from-black to-transparent z-10">
-            <img src={`${image.imageFormat},${Buffer.from(image.data,ArrayBuffer).toString('base64')}`}
+            const galleryUrl=`${image.imageFormat},${Buffer.from(image.data,ArrayBuffer).toString('base64')}`;
+            return <div key={image._id} 
+            className="relative w-11/12 shadow-lg hover:scale-110 transition-all hover:shadow-2xl bg-gradient-to-l from-black to-transparent">
+            <img  onClick={()=> { 
+              props.setOpenModal('dismissible');
+              setModalImgUrl(galleryUrl);
+              }}
+            src={galleryUrl}
               className="h-full w-full object-cover rounded" />
-            <div className="opacity-50 absolute inset-0 bg-gradient-to-b from-black to-transparent"></div>
+            <div className="opacity-50 h-1/4 absolute inset-0 bg-gradient-to-b from-black to-transparent"></div>
             <div className="absolute inset-5 flex justify-center items-center h-fit w-fit " >
               <button onClick={()=>{favoriteImage(image._id,index)}}>
                 <HeartIcon className={`w-8 h-8 stroke-white ${redHearts[index]&&"fill-red-600"} hover:fill-red-600 hover:stroke-white hover:scale-105 active:fill-red-600`}/>
               </button>
-              <p className="text-white h-fit mx-3">23,092</p>
+              <p className="text-white h-fit mx-3">{Math.floor(Math.random()*1000)}</p>
             </div>
             <p>Uploaded by {image.uploader}</p>
             </div>
           }
           )}
+          </Suspense>
       </div>
+
+      <Modal dismissible show={props.openModal === 'dismissible'} onClose={() => props.setOpenModal(undefined)} size="7xl">
+        <Modal.Body className="p-0" style={{scrollbarWidth:0}}>
+          <img src={modalImgUrl} className="h-full w-full"></img>
+        </Modal.Body>
+      </Modal>
       <MyFooter />
       <Toaster />
     </>
@@ -84,8 +102,8 @@ export default function Page(){
   //10. need to protect some more routes.
   //11. enlarge to full size on click image in home
   //12. Unfavorite image on second click
+
   //13. sometimes next Link not working...check
   //14. Accounts page ->add pfp, change password, email etc. see all details.
   //15. style the verify and forgot emails
-  //16. carousel currently unresponsive.fix.
-  //17. fix ui in profile page side bar to go back to drop zone
+  //16. revalidation and server actions??

@@ -4,7 +4,7 @@ import axios from 'axios';
 
 export default function ProfileCard({username, email, isVerified, userID}) {
   return (
-    <Card>
+    <Card className='rounded-md'>
       <div className="flex flex-col items-center py-3">
         <img
           alt="Bonnie image"

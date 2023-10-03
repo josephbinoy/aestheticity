@@ -8,6 +8,8 @@ import toast, { Toaster } from 'react-hot-toast';
 import Dropzone from 'react-dropzone'
 import { PhotoIcon,HeartIcon,ArrowUpOnSquareIcon } from "@heroicons/react/24/outline";
 import { PhotoIcon as FilledPhoto,HeartIcon as FilledHeart} from "@heroicons/react/24/solid";
+import { Button } from "flowbite-react";
+import { Transition } from "@headlessui/react";
 
 export default function Page(){
     const router=useRouter();
@@ -109,12 +111,21 @@ export default function Page(){
         <>
         <Toaster />
         <div className="flex h-[calc(100vh-80px)] w-full">
-            <div className="w-[400px] bg-gray-50">
-                <ul className="m-10">
-                    <li onClick={renderProfile}><ProfileCard username={user.username} email={user.email} isVerified={user.isVerified} userID={user._id}/></li>
-                    <li onClick={renderFavorites} className="cursor-pointer flex items-center gap-2 h-12 my-10 w-full text-3xl text-gray-500">
+            <div className="relative w-[400px] bg-gray-50">
+                    <Transition show={!showProfile}
+                            enter="transition-opacity duration-75"
+                            enterFrom="opacity-0"
+                            enterTo="opacity-100"
+                            leave="transition-opacity duration-150"
+                            leaveFrom="opacity-100"
+                            leaveTo="opacity-0"
+                    ><Button color="light" className="rounded-md mx-10 my-5 absolute top:0 shadow right:0 focus:ring-0" onClick={renderProfile}>Back to profile</Button></Transition>
+                    <ul className="m-10 mt-20">
+                    <li><ProfileCard username={user.username} email={user.email} isVerified={user.isVerified} userID={user._id}/></li>
+                    <li onClick={renderFavorites} className={`cursor-pointer flex items-center gap-2 h-12 my-10 w-full text-2xl text-gray-500 ${showFavorites&&"text-3xl"}`}>
                     {showFavorites?<FilledHeart className="w-10 h-10 inline fill-red-600" />:<HeartIcon className="w-8 h-8 inline"/>} Your favorites</li>
-                    <li onClick={renderUploads} className="cursor-pointer flex items-center gap-2 h-12 w-full text-3xl text-gray-500">
+                    
+                    <li onClick={renderUploads} className={`cursor-pointer flex items-center gap-2 h-12 my-10 w-full text-2xl text-gray-500 ${showUploads&&"text-3xl"}`}>
                     {showUploads?<FilledPhoto className="w-10 h-10 inline fill-gray-700" />:<PhotoIcon className="w-8 h-8"/>}Your uploads</li>
                 </ul>
             </div>
@@ -135,7 +146,7 @@ export default function Page(){
                 {favoritesArray.map((image)=>{
                 return <div key={image._id} className="w-11/12">
                 <img src={`${image.imageFormat},${Buffer.from(image.data,ArrayBuffer).toString('base64')}`}
-                className="h-full w-full object-contain rounded" />
+                className="w-full object-contain rounded" />
                 </div>
                 })}
             </div>}
@@ -143,7 +154,7 @@ export default function Page(){
                 {uploadsArray.map((image)=>{
                 return <div key={image._id} className="w-11/12">
                 <img src={`${image.imageFormat},${Buffer.from(image.data,ArrayBuffer).toString('base64')}`}
-                className="h-full w-full object-contain rounded" />
+                className="w-full object-contain rounded" />
                 </div>
                 })}
             </div>}
