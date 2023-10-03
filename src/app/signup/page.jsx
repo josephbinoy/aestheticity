@@ -9,6 +9,7 @@ import { Button } from 'flowbite-react';
 
 export default function Page(){
     const router=useRouter();
+    const [isLoading, setIsLoading]=useState(false);
     const [allowSubmit, setAllowSubmit]=useState(false);
     const [user, setUser]=useState({
         username:"",
@@ -24,9 +25,8 @@ export default function Page(){
 
     async function signUpUser(){
         try {
-            console.log("sending axios request");
             const response=await axios.post("/api/users/signup", user);
-            console.log("sent axios request");
+            setIsLoading(false);
             toast.success(response.data.message);
             router.push('/login');
         } catch (error) {
@@ -54,7 +54,7 @@ export default function Page(){
                             <input className="text-black p-4 w-[300px] rounded-md focus:border-black focus:ring-black" onChange={handleChange} type="email" placeholder="Enter Email" name="email" value={user.email} />
                             <label className="self-start -mb-3">Password</label>
                             <input className="text-black p-4 w-[300px] rounded-md focus:border-black focus:ring-black" onChange={handleChange} type="password" placeholder="Enter Password" name="password" value={user.password} />
-                            {allowSubmit?<Button type="submit" color="dark" className="rounded-md">Sign up</Button>:<button type="button" className="cursor-default p-3 bg-gray-200 rounded-md text-gray-400">Enter details</button>}
+                            {allowSubmit?<Button isProcessing={isLoading?true:false}  onClick={()=>{setIsLoading(true)}} type="submit" color="dark" className="rounded-md">Sign up</Button>:<button type="button" className="cursor-default p-3 bg-gray-200 rounded-md text-gray-400">Enter details</button>}
                         </form>
                 <p>Don't have an account? <Link className="text-red-500 hover:text-red-800" href="/login">Log in</Link> now!</p>
                 </div>               

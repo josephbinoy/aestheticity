@@ -1,6 +1,7 @@
 "use client"
 
 import axios from "axios"
+import { Button } from "flowbite-react";
 import { useState } from "react"
 import toast, { Toaster } from 'react-hot-toast';
 
@@ -24,13 +25,13 @@ export default function Page(){
     }
 
     return (
-        <div className="flex h-screen w-screen">
+        <div className="flex h-[calc(100vh-80px)] w-full" style={{backgroundImage:"url(/1610401382868.gif)"}}>
             <div className="flex h-[500px] w-fit m-auto flex-col justify-evenly items-center">
-                <h1 className="text-3xl">Enter your username or email and we will send you an email with further instructions</h1>
+                <h1 className="text-[40px] text-gray-200 text-center px-20">Enter your username or email and we will send you an email with further instructions</h1>
                 <form onSubmit={handleForgotPassword} className="flex flex-col justify-evenly items-center h-[400px]">
                     <label className="self-start"></label>
-                    <input className="p-4 w-[300px] rounded-lg focus:outline-red-600 text-black" onChange={handleChange} type="text" placeholder="Enter Username or Email" value={userIdentifier} />
-                    <button className="bg-slate-500 p-3 rounded-xl hover:bg-slate-200 hover:text-black">Send email</button>
+                    <input className="p-4 w-[300px] rounded-md text-black focus:border-black focus:ring-black" onChange={handleChange} type="text" placeholder="Enter username or email" value={userIdentifier} />
+                    <Button color="dark" className="bg-black rounded-md">Send email</Button>
                 </form>
                 <Toaster />                
         </div>

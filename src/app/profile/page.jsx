@@ -2,7 +2,6 @@
 
 import axios from "axios"
 import ProfileCard from "@/components/Profilecard";
-import { useRouter } from "next/navigation";
 import { useState,useEffect} from "react";
 import toast, { Toaster } from 'react-hot-toast';
 import Dropzone from 'react-dropzone'
@@ -10,9 +9,10 @@ import { PhotoIcon,HeartIcon,ArrowUpOnSquareIcon } from "@heroicons/react/24/out
 import { PhotoIcon as FilledPhoto,HeartIcon as FilledHeart} from "@heroicons/react/24/solid";
 import { Button } from "flowbite-react";
 import { Transition } from "@headlessui/react";
+import ProfileSkeleton from "@/components/ProfileSkeleton";
 
 export default function Page(){
-    const router=useRouter();
+    const [isLoading, setIsLoading]=useState(true);
     const [user,setUser]=useState({
         _id:"",
         username:"-",
@@ -33,6 +33,7 @@ export default function Page(){
         try{
         const response=await axios.post("/api/users/profile/favorites", {userID:user._id});
         setFavoritesArray(response.data.user.favorites);
+        setIsLoading(false);
         }
         catch(error){
             toast.error(error.response.data.error);
@@ -47,6 +48,7 @@ export default function Page(){
         try{
         const response=await axios.post("/api/users/profile/uploads", {userID:user._id});
         setUploadsArray(response.data.user.uploads);
+        setIsLoading(false);
         }
         catch(error){
             toast.error(error.response.data.error);
@@ -122,10 +124,10 @@ export default function Page(){
                     ><Button color="light" className="rounded-md mx-10 my-5 absolute top:0 shadow right:0 focus:ring-0" onClick={renderProfile}>Back to profile</Button></Transition>
                     <ul className="m-10 mt-20">
                     <li><ProfileCard username={user.username} email={user.email} isVerified={user.isVerified} userID={user._id}/></li>
-                    <li onClick={renderFavorites} className={`cursor-pointer flex items-center gap-2 h-12 my-10 w-full text-2xl text-gray-500 ${showFavorites&&"text-3xl"}`}>
+                    <li onClick={()=>{setIsLoading(true);renderFavorites()}} className={`cursor-pointer flex items-center gap-2 h-12 my-10 w-full text-2xl text-gray-500 ${showFavorites&&"text-3xl"}`}>
                     {showFavorites?<FilledHeart className="w-10 h-10 inline fill-red-600" />:<HeartIcon className="w-8 h-8 inline"/>} Your favorites</li>
                     
-                    <li onClick={renderUploads} className={`cursor-pointer flex items-center gap-2 h-12 my-10 w-full text-2xl text-gray-500 ${showUploads&&"text-3xl"}`}>
+                    <li onClick={()=>{setIsLoading(true);renderUploads()}} className={`cursor-pointer flex items-center gap-2 h-12 my-10 w-full text-2xl text-gray-500 ${showUploads&&"text-3xl"}`}>
                     {showUploads?<FilledPhoto className="w-10 h-10 inline fill-gray-700" />:<PhotoIcon className="w-8 h-8"/>}Your uploads</li>
                 </ul>
             </div>
@@ -142,7 +144,8 @@ export default function Page(){
                         )}
                     </Dropzone>
             </div>}
-            {showFavorites&&<div className="flex-1 grid 2xl:grid-cols-2 gap-10 my-20 px-20 ">
+            {!showProfile&&isLoading&&<ProfileSkeleton />}
+            {showFavorites&&!isLoading&&<div className="flex-1 grid 2xl:grid-cols-2 gap-10 my-20 px-20 ">
                 {favoritesArray.map((image)=>{
                 return <div key={image._id} className="w-11/12">
                 <img src={`${image.imageFormat},${Buffer.from(image.data,ArrayBuffer).toString('base64')}`}
@@ -150,7 +153,7 @@ export default function Page(){
                 </div>
                 })}
             </div>}
-            {showUploads&&<div className="flex-1 grid 2xl:grid-cols-2 gap-10 my-20 px-20 ">
+            {showUploads&&!isLoading&&<div className="flex-1 grid 2xl:grid-cols-2 gap-10 my-20 px-20 ">
                 {uploadsArray.map((image)=>{
                 return <div key={image._id} className="w-11/12">
                 <img src={`${image.imageFormat},${Buffer.from(image.data,ArrayBuffer).toString('base64')}`}

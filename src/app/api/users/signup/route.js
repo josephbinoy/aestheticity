@@ -28,8 +28,6 @@ export async function POST(request){
 
         //save new user in DB
         const savedUser=await newUser.save();
-        const stringUserId = savedUser._id.toHexString();
-        sendMail(email, "VERIFY", stringUserId);
 
         return NextResponse.json({
             message:"User created successfully",

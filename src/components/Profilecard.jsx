@@ -1,6 +1,7 @@
 import { Card } from 'flowbite-react';
 import { ArrowUpRightIcon } from '@heroicons/react/24/outline';
 import axios from 'axios';
+import toast, {Toaster} from "react-hot-toast"
 
 export default function ProfileCard({username, email, isVerified, userID}) {
   return (
@@ -36,8 +37,9 @@ export default function ProfileCard({username, email, isVerified, userID}) {
             </p>
           </a>
           {!isVerified&&<a onClick={async ()=>{await axios.post("/api/users/sendverify",{
-            email:email, userID:userID
-          })}} className="inline-flex items-center rounded-lg border border-green-300 bg-white px-4 py-2 text-center text-sm font-medium text-gray-900 hover:bg-gray-100 focus:outline-none focus:ring-4 focus:ring-gray-200 dark:border-gray-600 dark:bg-gray-800 dark:text-white dark:hover:border-gray-700 dark:hover:bg-gray-700 dark:focus:ring-gray-700"
+            email:email, userID:userID})
+            toast.success("Verification email sent")}} 
+            className="inline-flex items-center rounded-lg border border-green-300 bg-white px-4 py-2 text-center text-sm font-medium text-gray-900 hover:bg-gray-100 focus:outline-none focus:ring-4 focus:ring-gray-200 dark:border-gray-600 dark:bg-gray-800 dark:text-white dark:hover:border-gray-700 dark:hover:bg-gray-700 dark:focus:ring-gray-700"
             href="#">
             <p className='text-green-500'>
               Verify

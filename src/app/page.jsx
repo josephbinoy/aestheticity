@@ -1,42 +1,13 @@
 "use client"
-import { useState,useEffect,Suspense } from "react"
-import { Carousel, Modal } from 'flowbite-react';
-import { HeartIcon } from "@heroicons/react/24/outline";
-import axios from "axios";
-import toast, {Toaster} from "react-hot-toast";
+
+import { Suspense, lazy} from 'react';
+import { Carousel } from 'flowbite-react';
 import MyFooter from "@/components/Footer";
+// import Gallery from '@/components/Gallery';
+const Gallery = lazy(() => import('@/components/Gallery'))
 
 export default function Page(){
-  const [modalImgUrl,setModalImgUrl]=useState("");
-  const [redHearts, setRedHearts]=useState([]);
-  const [galleryArray,setGalleryArray]=useState([]);
-  const [openModal, setOpenModal] = useState();
-  const props = { openModal, setOpenModal };
 
-  async function favoriteImage(id,i){
-    let favoriteArray=redHearts.map((item,index)=>(i==index)?true:item)
-    setRedHearts(favoriteArray);
-    try{
-      const response=await axios.post("/api/images/favorite",{imageID:id});
-      toast.success(response.data.message);
-    }
-    catch(error){
-      toast.error(error.response.data.error);
-    }
-  }
-
-  useEffect(()=>{
-      async function getHomepageImages(){
-      const response=await axios.get("/api/images/getimages");
-      setGalleryArray(response.data.images);
-      let heartArray=[];
-      for(var i=0;i<response.data.images.length;i++){
-        heartArray.push(false)
-      }
-      setRedHearts(heartArray);
-    }
-    getHomepageImages();
-  },[])
   return (
     <>
       <div className="relative h-[60vh]">
@@ -53,43 +24,13 @@ export default function Page(){
           <h1 className="inline-block mx-20 text-gray-300">from you. for you.</h1>
       </div>
       </div>
-      <h1 className="text-4xl font-bold m-20">Uncompressed images in all their glory.</h1>
-      <div className="grid md:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 w-full gap-10 my-20 px-20 ">
-      <Suspense fallback={<p>Loading...</p>}>
-          {galleryArray.map((image,index)=>{
-            const galleryUrl=`${image.imageFormat},${Buffer.from(image.data,ArrayBuffer).toString('base64')}`;
-            return <div key={image._id} 
-            className="relative w-11/12 shadow-lg hover:scale-110 transition-all hover:shadow-2xl bg-gradient-to-l from-black to-transparent">
-            <img  onClick={()=> { 
-              props.setOpenModal('dismissible');
-              setModalImgUrl(galleryUrl);
-              }}
-            src={galleryUrl}
-              className="h-full w-full object-cover rounded" />
-            <div className="opacity-50 h-1/4 absolute inset-0 bg-gradient-to-b from-black to-transparent"></div>
-            <div className="absolute inset-5 flex justify-center items-center h-fit w-fit " >
-              <button onClick={()=>{favoriteImage(image._id,index)}}>
-                <HeartIcon className={`w-8 h-8 stroke-white ${redHearts[index]&&"fill-red-600"} hover:fill-red-600 hover:stroke-white hover:scale-105 active:fill-red-600`}/>
-              </button>
-              <p className="text-white h-fit mx-3">{Math.floor(Math.random()*1000)}</p>
-            </div>
-            <p>Uploaded by {image.uploader}</p>
-            </div>
-          }
-          )}
-          </Suspense>
-      </div>
-
-      <Modal dismissible show={props.openModal === 'dismissible'} onClose={() => props.setOpenModal(undefined)} size="7xl">
-        <Modal.Body className="p-0" style={{scrollbarWidth:0}}>
-          <img src={modalImgUrl} className="h-full w-full"></img>
-        </Modal.Body>
-      </Modal>
+      <Suspense fallback={<div className='h-screen w-[900px] bg-red-300'>Loading now!!!!!!!!</div>}>
+      <Gallery />
+      </Suspense>
       <MyFooter />
-      <Toaster />
     </>
   )
-  }
+}
   //1. store as arraybuffer and decode to base64 only when retrieving
   //2. store images in another database and store only urls in mongosdb -best method
   //3. useContext to save logged in status and user details from navbar get

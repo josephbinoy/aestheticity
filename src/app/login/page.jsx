@@ -9,6 +9,7 @@ import { Button } from 'flowbite-react';
 
 export default function Page(){
     const router=useRouter();
+    const [isLoading, setIsLoading]=useState(false);
     const [user, setUser]=useState({
         username:"",
         password:""
@@ -23,8 +24,8 @@ export default function Page(){
     async function loginUser(e){
         try{
             e.preventDefault();
-            const response=await axios.post("/api/users/login", user);
-            console.log(response.data);
+            await axios.post("/api/users/login", user);
+            setIsLoading(false);
             router.push("/");
         }
         catch(error){
@@ -47,7 +48,7 @@ export default function Page(){
                     <label className="self-start -mb-4">Password</label>
                     <input className="p-4 w-[300px] rounded-md text-black focus:border-black focus:ring-black" onChange={handleChange} type="password" placeholder="Enter Password" name="password" value={user.password} />
                     <Link className="hover:text-red-500" href="/forgotpassword">Forgot Password?</Link>
-                    <Button type="submit" className="rounded-md" color="dark">Log in</Button>
+                    <Button isProcessing={isLoading?true:false} type="submit" className="rounded-md cursor-pointer" color="dark" onClick={()=>{setIsLoading(true)}}>Log in</Button>
                 </form>
                 <p>Don't have an account? <Link className="text-red-500 hover:text-red-800" href="/signup">Sign up</Link> now!</p>
                 </div>               

@@ -10,7 +10,6 @@ export async function POST(request){
     try {
         //get body of request
         const reqBody=await request.json();
-        console.log(reqBody);
         const {username,password}=reqBody;
         //check if username exists
         const user=await User.findOne({username:username});
