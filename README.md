@@ -18,8 +18,8 @@ Features:
 ![alt text](https://github.com/josephbinoy/aestheticity/blob/main/public/Web%20capture_25-10-2023_203150_localhost.jpeg?raw=true)
 
 
-### Login Page (left side is an aesthetic gif)
-![v32023-10-25 21-21-26](https://github.com/josephbinoy/aestheticity/assets/94060444/8f30bc64-8fc5-4af7-992d-d083ccd310c7)
+### Login Page (couldnt record at high bitrate rip)
+![alt text](https://github.com/josephbinoy/aestheticity/blob/main/public/2023-10-25-21-21-26.gif?raw=true)
 
 **at the time i didn't know mongoDB is so bad at storing images. There are so many steps in between involving base64 encoding, bindata, array buffers... hence its very slow over https. 
 
