@@ -4,7 +4,7 @@
 
 Features:
 1. Signup/Login
-2. Store user and session data in cookies through JSWT to persist session.
+2. Store user and session data in cookies through JWT to persist session.
 3. Forgot/Reset password via email
 4. Verify account via email
 5. Image upload, download**
