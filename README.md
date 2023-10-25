@@ -1,6 +1,6 @@
 # aestheticity
 
-Full stack Image Gallery using next.js, tailwind
+##Full stack Image Gallery using next.js, tailwind
 
 Features:
 1. Signup/Login
