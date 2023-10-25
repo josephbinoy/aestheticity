@@ -13,8 +13,10 @@ Features:
 8. Settings page to verify email, check account status, reset password etc (in the works)
 9. Skeleton loading and Lazy Loading (in the works)
 
-Homepage (mongoDB IP whitelist problem so images didn't load at the time, but you can see the skeleton loaders in action)
+### Homepage 
+(mongoDB IP whitelist problem so images didn't load at the time, but you can see the skeleton loaders in action)
 ![alt text](https://github.com/josephbinoy/aestheticity/blob/main/public/Web%20capture_25-10-2023_203150_localhost.jpeg?raw=true)
 
-Login Page (left side is an aesthetic gif)
+
+### Login Page (left side is an aesthetic gif)
 ![alt text](https://github.com/josephbinoy/aestheticity/blob/main/public/Web%20capture_25-10-2023_203232_localhost.jpeg?raw=true)
