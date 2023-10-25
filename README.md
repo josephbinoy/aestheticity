@@ -7,7 +7,7 @@ Features:
 2. Store user and session data in cookies through JSWT to persist session.
 3. Forgot/Reset password via email
 4. Verify account via email
-5. Image upload, download*
+5. Image upload, download**
 6. Favorite images
 7. Account page with user's uploaded images, favorited images and so much more
 8. Settings page to verify email, check account status, reset password etc (in the works)
@@ -21,4 +21,4 @@ Features:
 ### Login Page (left side is an aesthetic gif)
 ![alt text](https://github.com/josephbinoy/aestheticity/blob/main/public/Web%20capture_25-10-2023_203232_localhost.jpeg?raw=true)
 
-*at the time i didn't know mongoDB is so bad at storing images. There are so many steps in between involving base64 encoding, bindata, array buffers... hence its very slow over https. 
+**at the time i didn't know mongoDB is so bad at storing images. There are so many steps in between involving base64 encoding, bindata, array buffers... hence its very slow over https. 
