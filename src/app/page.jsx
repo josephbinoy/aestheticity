@@ -36,15 +36,11 @@ export default function Page(){
   //3. useContext to save logged in status and user details from navbar get
   //4. Lazy loading, load 8 images on scroll instead of all 50+ at once
   //5. replace all img with next Image component
-  //6. Verification page, forgot password page
   //7. Navbar fails get when not logged in....see point 3
-  //8. Loading UI. Read docs
   //9. page not found ui
   //10. need to protect some more routes.
-  //11. enlarge to full size on click image in home
   //12. Unfavorite image on second click
-
-  //13. sometimes next Link not working...check
   //14. Accounts page ->add pfp, change password, email etc. see all details.
   //15. style the verify and forgot emails
   //16. revalidation and server actions??
+  //17. remove skeleton loading on profile favorites and uploads so that next caches the images.
